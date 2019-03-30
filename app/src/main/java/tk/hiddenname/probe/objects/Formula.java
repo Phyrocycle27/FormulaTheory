@@ -84,6 +84,7 @@ public class Formula implements Parcelable {
         for (String component : components)
             targetFormula = targetFormula.replace(component, map.get(component));
 
+        //http
         // *****************Передаём полученное выражение на вычисление в новый поток***********************
         // Создаём внутренний локальный поток для вычисления
         final String finalTargetFormula = targetFormula;
