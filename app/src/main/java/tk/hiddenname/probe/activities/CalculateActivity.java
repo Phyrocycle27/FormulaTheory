@@ -19,7 +19,7 @@ public class CalculateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.calculate);
+        setContentView(R.layout.activity_calculate);
         ListView listView = findViewById(R.id.listview);
 
         Formula formula = getIntent().getParcelableExtra("formula");

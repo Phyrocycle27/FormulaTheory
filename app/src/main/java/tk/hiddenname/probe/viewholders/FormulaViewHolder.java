@@ -6,10 +6,10 @@ import android.widget.TextView;
 
 import tk.hiddenname.probe.R;
 
-public class ViewHolder3 extends RecyclerView.ViewHolder {
+public class FormulaViewHolder extends RecyclerView.ViewHolder {
     private TextView label1, label2;
 
-    public ViewHolder3(View v) {
+    public FormulaViewHolder(View v) {
         super(v);
         label1 = v.findViewById(R.id.formula);
         label2 = v.findViewById(R.id.name);
