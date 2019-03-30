@@ -18,5 +18,6 @@
         <item>ρ = (P - P.атм.)/(g*h)</item>
         <item>h = (P - P.атм.)/(g*ρ)</item>
         <item>P.атм. = P - ρ*g*h</item>
+        <item>g = (P - P.атм.)/(ρ*h)</item>
     </string-array>
 </resources>
