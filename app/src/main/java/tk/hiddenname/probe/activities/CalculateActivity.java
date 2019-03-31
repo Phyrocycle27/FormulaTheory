@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,15 +46,22 @@ public class CalculateActivity extends AppCompatActivity {
 	  for (String component : formula.getComponents()) {
 		 linear.addView(addField(component));
 	  }
+	  Log.d("Calculate", "HashMap \"values\" is: " + values.toString());
    }
 
    @SuppressLint("SetTextI18n")
    private View addField(String str) {
 	  @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.calculate_item, null);
-	  TextView later = view.findViewById(R.id.component_name);
+	  TextView letter = view.findViewById(R.id.component_name);
 	  EditText value = view.findViewById(R.id.value);
-	  later.setText(str + " = ");
+	  Spinner spinner = view.findViewById(R.id.spinner);
+	  ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, SubjectsList.getUnits().getUnitsByLetter(str));
+	  adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	  spinner.setAdapter(adapter);
+	  letter.setText(str + " = ");
+	  value.setHint(SubjectsList.getHints().getHints().get(str));
 	  if (str.equals("g")) value.setText("9.81");
+	  Log.d("Calculate", "New view created: " + view.toString());
 	  addedViews.add(view);
 	  return view;
    }
@@ -60,17 +69,20 @@ public class CalculateActivity extends AppCompatActivity {
    @Override
    protected void onResume() {
 	  super.onResume();
+	  // Определяем кнопку "Решить" и устанавливаем на неё слушатель
 	  Button btn = findViewById(R.id.calculate_btn);
 	  btn.setOnClickListener(new View.OnClickListener() {
 		 @Override
 		 public void onClick(View v) {
 			View unknown = new View(getApplicationContext());
+			//Передаём введённые значения в
 			for (int i = 0; i < addedViews.size(); i++) {
 			   String str = ((EditText) addedViews.get(i).findViewById(R.id.value)).getText().toString();
 			   if (str.equals("")) unknown = addedViews.get(i);
 			   values.put(formula.getComponentByIndex(i), str);
 			}
-			((EditText) unknown.findViewById(R.id.value)).setText(formula.solve(values));
+			Log.d("Calculate", "HashMap \"values\" is: " + values.toString());
+			((EditText) unknown.findViewById(R.id.value)).setText(String.valueOf(formula.solve(values)));
 			for (String key : values.keySet()) values.put(key, null);
 		 }
 	  });

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
@@ -9,14 +10,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
         android:ems="6"
-        android:autofillHints="pass"
-        tools:targetApi="o" />
+        android:textStyle="italic"
+        android:importantForAutofill="no"
+        android:inputType="number|numberDecimal"
+        android:gravity="center"
+        tools:targetApi="o"
+        tools:ignore="LabelFor" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

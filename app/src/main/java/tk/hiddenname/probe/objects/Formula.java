@@ -85,10 +85,10 @@ public class Formula implements Parcelable {
 	  for (String component : components)
 		 targetFormula = targetFormula.replace(component, map.get(component));
 	  // Вывод выражения в Log
-	  // Log.d("Formula", "Current target formula is: " + targetFormula);
+	  Log.d("Formula", "Current target formula is: " + targetFormula);
 	  // *****************Передаём полученное выражение на вычисление в новый поток***********************
 	  // Создаём внутренний локальный поток для вычисления
-	  final String finalTargetFormula = targetFormula;
+	  final String finalExpression = targetFormula;
 	  class SolveThread extends Thread {
 		 @Override
 		 public void run() {
@@ -96,14 +96,14 @@ public class Formula implements Parcelable {
 		 }
 
 		 private String calculate() {
-			Expression expression = new Expression(finalTargetFormula);
-			return String.valueOf((int) (expression.calculate()));
+			Expression expression = new Expression(finalExpression);
+			return String.valueOf((expression.calculate()));
 		 }
 	  }
-	  // Запускаем поток
+	  // Запускаем поток вычисления
 	  SolveThread st = new SolveThread();
 	  st.start();
-	  // Возвращаем ответ
+	  // Возвращаем ответ на выражение
 	  return st.calculate();
    }
 
