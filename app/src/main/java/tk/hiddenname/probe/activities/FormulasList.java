@@ -16,49 +16,49 @@ import tk.hiddenname.probe.objects.Formula;
 
 public class FormulasList extends AppCompatActivity {
 
-    private RecyclerView rv;
+   private RecyclerView rv;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+	  super.onCreate(savedInstanceState);
+	  setContentView(R.layout.activity_main);
 
-        rv = findViewById(R.id.recycle);
-        rv.setHasFixedSize(false);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setAdapter(new ComplexRecyclerViewAdapter(getData()));
-    }
+	  rv = findViewById(R.id.recycle);
+	  rv.setHasFixedSize(false);
+	  rv.setLayoutManager(new LinearLayoutManager(this));
+	  rv.setAdapter(new ComplexRecyclerViewAdapter(getData()));
+   }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        rv.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), rv,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        next(position);
-                    }
+   @Override
+   protected void onResume() {
+	  super.onResume();
+	  rv.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), rv,
+			  new RecyclerItemClickListener.OnItemClickListener() {
+				 @Override
+				 public void onItemClick(View view, int position) {
+					next(position);
+				 }
 
-                    @Override
-                    public void onLongItemClick(View view, int position) {
+				 @Override
+				 public void onLongItemClick(View view, int position) {
 
-                    }
-                }));
-    }
+				 }
+			  }));
+   }
 
-    private ArrayList<Object> getData() {
-        try {
-            return new ArrayList<Object>(getIntent().getParcelableArrayListExtra("formulas"));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+   private ArrayList<Object> getData() {
+	  try {
+		 return new ArrayList<Object>(getIntent().getParcelableArrayListExtra("formulas"));
+	  } catch (NullPointerException e) {
+		 e.printStackTrace();
+	  }
+	  return null;
+   }
 
-    private void next(int position) {
-        Intent intent = new Intent(FormulasList.this, CalculateActivity.class);
-        Formula formula = (Formula) getData().get(position);
-        intent.putExtra("formula", formula);
-        startActivity(intent);
-    }
+   private void next(int position) {
+	  Intent intent = new Intent(FormulasList.this, CalculateActivity.class);
+	  Formula formula = (Formula) getData().get(position);
+	  intent.putExtra("formula", formula);
+	  startActivity(intent);
+   }
 }
