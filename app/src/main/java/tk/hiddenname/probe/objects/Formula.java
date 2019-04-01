@@ -70,7 +70,7 @@ public class Formula implements Parcelable {
 	  return formulas;
    }
 
-   public String solve(HashMap<String, String> map) {
+   public double solve(HashMap<String, String> map) {
 	  // Неизвестный компонент и целевая формула
 	  String unknown = "", targetFormula = "";
 	  // Определяем неизвестный компонент
@@ -95,9 +95,9 @@ public class Formula implements Parcelable {
 			super.run();
 		 }
 
-		 private String calculate() {
+		 private double calculate() {
 			Expression expression = new Expression(finalExpression);
-			return String.valueOf((expression.calculate()));
+			return expression.calculate();
 		 }
 	  }
 	  // Запускаем поток вычисления

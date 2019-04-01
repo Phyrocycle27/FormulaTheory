@@ -53,8 +53,8 @@ public class CalculateActivity extends AppCompatActivity {
    private View addField(String str) {
 	  @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.calculate_item, null);
 	  TextView letter = view.findViewById(R.id.component_name);
-	  EditText value = view.findViewById(R.id.value);
-	  Spinner spinner = view.findViewById(R.id.spinner);
+	  EditText value = view.findViewById(R.id.value_field);
+	  Spinner spinner = view.findViewById(R.id.units_spinner);
 	  ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, SubjectsList.getUnits().getUnitsByLetter(str));
 	  adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	  spinner.setAdapter(adapter);
@@ -77,12 +77,15 @@ public class CalculateActivity extends AppCompatActivity {
 			View unknown = new View(getApplicationContext());
 			//Передаём введённые значения в
 			for (int i = 0; i < addedViews.size(); i++) {
-			   String str = ((EditText) addedViews.get(i).findViewById(R.id.value)).getText().toString();
+			   String str = ((EditText) addedViews.get(i).findViewById(R.id.value_field)).getText().toString();
 			   if (str.equals("")) unknown = addedViews.get(i);
 			   values.put(formula.getComponentByIndex(i), str);
 			}
 			Log.d("Calculate", "HashMap \"values\" is: " + values.toString());
-			((EditText) unknown.findViewById(R.id.value)).setText(String.valueOf(formula.solve(values)));
+			double answer = formula.solve(values);
+			if((int) (answer) == answer)
+			   ((EditText) unknown.findViewById(R.id.value_field)).setText(String.valueOf(answer));
+			else ((EditText) unknown.findViewById(R.id.value_field)).setText(String.valueOf((int) answer));
 			for (String key : values.keySet()) values.put(key, null);
 		 }
 	  });
