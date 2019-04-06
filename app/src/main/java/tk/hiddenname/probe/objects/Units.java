@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class Units {
 
-   private HashMap<String, Unit> units = new HashMap<>();
+   private HashMap<String, Units.Unit> units = new HashMap<>();
 
-   public void addUnit(String letter, Unit unit) {
+   public void addUnit(String letter, Units.Unit unit) {
 	  units.put(letter, unit);
    }
 
@@ -24,7 +24,7 @@ public class Units {
 	  }
 
 	  private HashMap<String, Double> getUnits() {
-		 return this.unit;
+		 return unit;
 	  }
 
 	  private double getCoeff(String nameOfUnit) {

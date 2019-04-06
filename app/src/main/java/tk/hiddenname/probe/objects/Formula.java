@@ -75,6 +75,7 @@ public class Formula implements Parcelable {
 	  String unknown = "", targetFormula = "";
 	  // Определяем неизвестный компонент
 	  for (String key : map.keySet())
+	     // Проверяем значение компонента в таблице по его ключу
 		 if (map.get(key).equals("")) unknown = key;
 	  // Находим формулу, подходящую для нахождения значения неизвестного компонента
 	  for (String formula : formulas)

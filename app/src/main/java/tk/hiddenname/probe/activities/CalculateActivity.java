@@ -51,15 +51,15 @@ public class CalculateActivity extends AppCompatActivity {
 
    @SuppressLint("SetTextI18n")
    private View addField(String str) {
-	  @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.calculate_item, null);
+	  @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.calculate_field, null);
 	  TextView letter = view.findViewById(R.id.component_name);
 	  EditText value = view.findViewById(R.id.value_field);
 	  Spinner spinner = view.findViewById(R.id.units_spinner);
-	  ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, SubjectsList.getUnits().getUnitsByLetter(str));
+	  ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, ListActivity.getUnits().getUnitsByLetter(str));
 	  adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	  spinner.setAdapter(adapter);
 	  letter.setText(str + " = ");
-	  value.setHint(SubjectsList.getHints().getHints().get(str));
+	  value.setHint(ListActivity.getHints().getHints().get(str));
 	  if (str.equals("g")) value.setText("9.81");
 	  Log.d("Calculate", "New view created: " + view.toString());
 	  addedViews.add(view);
@@ -76,17 +76,20 @@ public class CalculateActivity extends AppCompatActivity {
 		 public void onClick(View v) {
 			View unknown = new View(getApplicationContext());
 			//Передаём введённые значения в
+			byte count = 0;
 			for (int i = 0; i < addedViews.size(); i++) {
 			   String str = ((EditText) addedViews.get(i).findViewById(R.id.value_field)).getText().toString();
-			   if (str.equals("")) unknown = addedViews.get(i);
+			   if (str.equals("")) {
+				  count++;
+				  unknown = addedViews.get(i);
+			   }
 			   values.put(formula.getComponentByIndex(i), str);
 			}
 			Log.d("Calculate", "HashMap \"values\" is: " + values.toString());
-			double answer = formula.solve(values);
-			if((int) (answer) == answer)
-			   ((EditText) unknown.findViewById(R.id.value_field)).setText(String.valueOf(answer));
-			else ((EditText) unknown.findViewById(R.id.value_field)).setText(String.valueOf((int) answer));
-			for (String key : values.keySet()) values.put(key, null);
+			if (count == 1) {
+			   ((EditText) unknown.findViewById(R.id.value_field)).setText(String.valueOf(formula.solve(values)));
+			   for (String key : values.keySet()) values.put(key, null);
+			}
 		 }
 	  });
    }

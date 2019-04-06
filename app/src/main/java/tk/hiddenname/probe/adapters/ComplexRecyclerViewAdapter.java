@@ -1,6 +1,7 @@
 package tk.hiddenname.probe.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,11 +20,13 @@ import tk.hiddenname.probe.viewholders.FormulaViewHolder;
 
 public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+   private Context context;
    private ArrayList<Object> items;
 
    private final int SUBJECT = 0, SECTION = 1, FORMULA = 2;
 
-   public ComplexRecyclerViewAdapter(ArrayList<Object> items) {
+   public ComplexRecyclerViewAdapter(ArrayList<Object> items, Context context) {
+	  this.context = context;
 	  this.items = items;
    }
 
@@ -53,7 +56,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
    @Override
    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 	  RecyclerView.ViewHolder viewHolder = null;
-	  LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+	  LayoutInflater inflater = LayoutInflater.from(context);
 
 	  switch (viewType) {
 		 case SUBJECT:
