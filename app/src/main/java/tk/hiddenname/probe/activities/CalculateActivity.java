@@ -1,11 +1,13 @@
 package tk.hiddenname.probe.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,18 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import tk.hiddenname.probe.R;
+import tk.hiddenname.probe.activities.main.ListActivity;
 import tk.hiddenname.probe.objects.Formula;
 
 public class CalculateActivity extends AppCompatActivity {
 
    private Formula formula;
-   private HashMap<String, String> values;
+   private HashMap<String, String> values, units;
    private List<View> addedViews;
 
    @Override
@@ -55,9 +60,14 @@ public class CalculateActivity extends AppCompatActivity {
 	  TextView letter = view.findViewById(R.id.component_name);
 	  EditText value = view.findViewById(R.id.value_field);
 	  Spinner spinner = view.findViewById(R.id.units_spinner);
-	  ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, ListActivity.getUnits().getUnitsByLetter(str));
-	  adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	  spinner.setAdapter(adapter);
+	  try {
+		 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
+				 ListActivity.getUnits().getUnitsByLetter(str));
+		 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		 spinner.setAdapter(adapter);
+	  } catch (NullPointerException e) {
+		 e.printStackTrace();
+	  }
 	  letter.setText(str + " = ");
 	  value.setHint(ListActivity.getHints().getHints().get(str));
 	  if (str.equals("g")) value.setText("9.81");
@@ -70,10 +80,13 @@ public class CalculateActivity extends AppCompatActivity {
    protected void onResume() {
 	  super.onResume();
 	  // Определяем кнопку "Решить" и устанавливаем на неё слушатель
-	  Button btn = findViewById(R.id.calculate_btn);
+	  final Button btn = findViewById(R.id.calculate_btn);
 	  btn.setOnClickListener(new View.OnClickListener() {
 		 @Override
 		 public void onClick(View v) {
+			//Убираем клавиатуру
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(btn.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			View unknown = new View(getApplicationContext());
 			//Передаём введённые значения в
 			byte count = 0;
@@ -87,8 +100,17 @@ public class CalculateActivity extends AppCompatActivity {
 			}
 			Log.d("Calculate", "HashMap \"values\" is: " + values.toString());
 			if (count == 1) {
-			   ((EditText) unknown.findViewById(R.id.value_field)).setText(String.valueOf(formula.solve(values)));
+			   String tmpAnswr = String.valueOf(formula.solve(values));
+			   String answer;
+			   String[] tmpArr = tmpAnswr.split("\\.");
+			   if(tmpArr[1].startsWith("0")) answer = tmpArr[0];
+			   else answer = tmpAnswr;
+			   ((EditText) unknown.findViewById(R.id.value_field)).setText(answer);
 			   for (String key : values.keySet()) values.put(key, null);
+			} else if (count >= 2) {
+			   Toasty.warning(CalculateActivity.this, R.string.not_enough_data_to_solve, Toast.LENGTH_LONG, true).show();
+			} else {
+			   Toasty.warning(CalculateActivity.this, R.string.nothing_to_solve).show();
 			}
 		 }
 	  });

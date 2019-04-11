@@ -8,14 +8,16 @@ import java.util.ArrayList;
 
 public class Subject {
    private String name;
-   private int numOfFormulas;
+   private int numOfFormulas, drawableId, color;
    private Bitmap bitmap;
    private ArrayList<Section> sections;
 
-   public Subject(int nameId, int drawableID, ArrayList<Section> sections, Context context) {
+   public Subject(int nameId, int drawableID, int color, ArrayList<Section> sections, Context context) {
+	  this.color = color;
 	  name = context.getResources().getString(nameId);
 	  bitmap = BitmapFactory.decodeResource(context.getResources(), drawableID);
 	  this.sections = sections;
+	  this.drawableId = drawableID;
 	  try {
 		 for (Section section : sections) numOfFormulas += section.getNumOfFormulas();
 	  } catch (NullPointerException e) {
@@ -25,6 +27,14 @@ public class Subject {
 
    public String getName() {
 	  return name;
+   }
+
+   public int getColor() {
+	  return color;
+   }
+
+   public int getDrawableId() {
+	  return drawableId;
    }
 
    public Bitmap getDrawable() {

@@ -19,12 +19,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="6"
-        android:textStyle="italic"
+        android:gravity="center"
         android:importantForAutofill="no"
         android:inputType="number|numberDecimal"
-        android:gravity="center"
-        tools:targetApi="o"
-        tools:ignore="LabelFor" />
+        android:textStyle="italic"
+        tools:ignore="LabelFor"
+        tools:targetApi="o" />
 
     <Spinner
         android:id="@+id/units_spinner"
