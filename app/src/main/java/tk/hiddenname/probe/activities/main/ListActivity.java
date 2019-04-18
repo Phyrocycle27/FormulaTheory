@@ -1,6 +1,7 @@
 package tk.hiddenname.probe.activities.main;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
@@ -9,7 +10,6 @@ import java.util.HashMap;
 
 import tk.hiddenname.probe.R;
 import tk.hiddenname.probe.objects.Formula;
-import tk.hiddenname.probe.objects.Hint;
 import tk.hiddenname.probe.objects.Section;
 import tk.hiddenname.probe.objects.Subject;
 import tk.hiddenname.probe.objects.Units;
@@ -19,7 +19,6 @@ public class ListActivity extends AppCompatActivity {
    private static int subjectIndex = 0, sectionIndex = 0, stage = 0;
    private static ArrayList<Object> subjects = new ArrayList<>();
    private static Units units = new Units();
-   private static Hint hints = new Hint();
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +27,8 @@ public class ListActivity extends AppCompatActivity {
 	  createData();
 	  //создаём фрагмент предметов
 	  SubjectsFragment fragment = new SubjectsFragment();
-	  FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+	  FragmentManager fragmentManager = getSupportFragmentManager();
+	  FragmentTransaction ft = fragmentManager.beginTransaction();
 	  ft.add(R.id.container, fragment);
 	  ft.commit();
    }
@@ -48,7 +48,6 @@ public class ListActivity extends AppCompatActivity {
 	  subjects.add(new Subject(R.string.chemistry, R.drawable.chemistry, android.R.color.holo_red_light, null, this));
 	  subjects.add(new Subject(R.string.algebra, R.drawable.algebra, android.R.color.holo_orange_light, null, this));
 	  subjects.add(new Subject(R.string.geometry, R.drawable.geometry, android.R.color.holo_green_light, null, this));
-
 	  // Экземпляры классов едениц измерения
 	  // Давление
 	  HashMap<String, Double> pressure = new HashMap<>();
@@ -58,7 +57,7 @@ public class ListActivity extends AppCompatActivity {
 	  pressure.put("МПа", 1000000.0);
 	  pressure.put("мПа", 0.001);
 	  pressure.put("мкПа", 0.000001);
-	  units.addUnit("P", units.new Unit(pressure));
+	  units.addUnit("P", "давление", units.new Unit(pressure));
 	  // Сила
 	  HashMap<String, Double> force = new HashMap<>();
 	  force.put("Н", 1.0);
@@ -66,7 +65,7 @@ public class ListActivity extends AppCompatActivity {
 	  force.put("МН", 1000000.0);
 	  force.put("мН", 0.001);
 	  force.put("мкН", 0.000001);
-	  units.addUnit("F", units.new Unit(force));
+	  units.addUnit("F", "сила", units.new Unit(force));
 	  // Площадь
 	  HashMap<String, Double> square = new HashMap<>();
 	  square.put("км²", 1000000.0);
@@ -76,12 +75,7 @@ public class ListActivity extends AppCompatActivity {
 	  square.put("см²", 0.0001);
 	  square.put("мм²", 0.000001);
 	  square.put("м²", 1.0);
-	  units.addUnit("S", units.new Unit(square));
-
-	  // Подсказки в поле ввода
-	  hints.getHints().put("P", "давление");
-	  hints.getHints().put("S", "площадь");
-	  hints.getHints().put("F", "сила");
+	  units.addUnit("S", "площадь",units.new Unit(square));
    }
 
    static void setSubjectIndex(int a) {
@@ -118,9 +112,5 @@ public class ListActivity extends AppCompatActivity {
 
    public static Units getUnits() {
 	  return units;
-   }
-
-   public static Hint getHints() {
-	  return hints;
    }
 }

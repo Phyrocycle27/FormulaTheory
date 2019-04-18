@@ -1,47 +1,45 @@
 package tk.hiddenname.probe.objects;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Units {
 
    private Map<String, Unit> units = new HashMap<>();
 
-   public void addUnit(String letter, Units.Unit unit) {
+   public void addUnit(String letter, String hint, Units.Unit unit) {
+	  unit.hint = hint;
 	  units.put(letter, unit);
-	  List<Map.Entry<String, Double>> list = new ArrayList<>(unit.getUnits().entrySet());
-	  Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-		 @Override
-		 public int compare(Map.Entry<String, Double> a, Map.Entry<String, Double> b) {
-			return a.getValue().compareTo(b.getValue());
-		 }
-	  });
    }
 
-   public String[] getUnitsByLetter(String letter) {
-	  return units.get(letter).getUnits().keySet().toArray(new String[0]);
+   public String[] getUnits(String letter) {
+      try {
+		 return units.get(letter).units.keySet().toArray(new String[0]);
+	  } catch (NullPointerException e) {
+         e.printStackTrace();
+	  }
+	  return null;
    }
 
+   public Double getCoef(String letter, String unit) {
+      return units.get(letter).getUnits().get(unit);
+   }
+
+   public String getHint(String letter) {
+	  return units.get(letter).hint;
+   }
 
    public class Unit {
 
-	  private Map<String, Double> unit;
+	  private Map<String, Double> units;
+	  private String hint;
 
-	  public Unit(HashMap<String, Double> unit) {
-		 this.unit = unit;
+	  public Unit(HashMap<String, Double> units) {
+		 this.units = units;
 	  }
 
-	  private Map<String, Double> getUnits() {
-		 return unit;
+	  Map<String, Double> getUnits() {
+		 return units;
 	  }
-
-	  private double getCoef(String nameOfUnit) {
-		 return unit.get(nameOfUnit);
-	  }
-
    }
 }

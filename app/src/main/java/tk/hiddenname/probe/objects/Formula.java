@@ -70,23 +70,27 @@ public class Formula implements Parcelable {
 	  return formulas;
    }
 
-   public double solve(HashMap<String, String> map) {
+   public double solve(HashMap<String, Double> map, HashMap<String, Double> units) {
 	  // Неизвестный компонент и целевая формула
-	  String unknown = "", targetFormula = "";
+	  String unknownComponent = "", targetFormula = "";
 	  // Определяем неизвестный компонент
 	  for (String key : map.keySet())
 		 // Проверяем значение компонента в таблице по его ключу
-		 if (map.get(key).equals("")) unknown = key;
+		 if (map.get(key).equals(0.0)) unknownComponent = key;
 	  // Находим формулу, подходящую для нахождения значения неизвестного компонента
 	  for (String formula : formulas)
-		 if (formula.startsWith(unknown + " ")) targetFormula = formula;
+		 if (formula.startsWith(unknownComponent)) targetFormula = formula;
 	  // Заменяем буквы в формуле на известные нам значения и составляем выражение
+	  Log.d("Calculate", "Current target formula is: " + targetFormula);
 	  String[] str = targetFormula.split("[=]");
 	  targetFormula = str[1].substring(1);
-	  for (String component : components)
-		 targetFormula = targetFormula.replace(component, map.get(component));
+	  for (String component : components) {
+		 double val = map.get(component);
+		 val *= units.get(component);
+		 targetFormula = targetFormula.replace(component, String.valueOf(val));
+	  }
 	  // Вывод выражения в Log
-	  Log.d("Formula", "Current target formula is: " + targetFormula);
+	  Log.d("Calculate", "Current target formula is: " + targetFormula);
 	  // *****************Передаём полученное выражение на вычисление в новый поток***********************
 	  // Создаём внутренний локальный поток для вычисления
 	  final String finalExpression = targetFormula;
@@ -105,7 +109,8 @@ public class Formula implements Parcelable {
 	  SolveThread st = new SolveThread();
 	  st.start();
 	  // Возвращаем ответ на выражение
-	  return st.calculate();
+	  Log.d("Calculate", "Unknown component's unit is: " + String.valueOf(units.get(unknownComponent)));
+	  return (st.calculate() * units.get(unknownComponent));
    }
 
    public static final Parcelable.Creator<Formula> CREATOR = new Parcelable.Creator<Formula>() {
