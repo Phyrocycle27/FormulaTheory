@@ -91,6 +91,7 @@ public class CalculateActivity extends AppCompatActivity {
 	  if (component.equals("g")) valueField.setText("9.81");
 	  addedViews.add(view);
 	  return view;
+	  //hey
    }
 
    @Override
