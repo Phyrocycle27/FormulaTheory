@@ -18,14 +18,14 @@ public class Formula implements Parcelable {
    private int numOfFormulas;
    private String[] formulas, components;
 
-   public Formula(int formulaArray, Context context) {
-	  String formulaArr[];
-	  formulaArr = context.getResources().getStringArray(formulaArray);
-	  int len = formulaArr.length - 1;
+   public Formula(int formulasArray, Context context) {
+	  String[] tmpFormulasArr;
+	  tmpFormulasArr = context.getResources().getStringArray(formulasArray);
+	  int len = tmpFormulasArr.length - 1;
 	  numOfFormulas = len;
-	  name = formulaArr[0];
+	  name = tmpFormulasArr[0];
 	  formulas = new String[len];
-	  System.arraycopy(formulaArr, 1, formulas, 0, len);
+	  System.arraycopy(tmpFormulasArr, 1, formulas, 0, len);
 	  formula = formulas[0];
 	  components = createComponets(formula);
 	  Log.d("COMPONENTS", Arrays.toString(components));
@@ -87,10 +87,10 @@ public class Formula implements Parcelable {
 	  for (String component : components) {
 		 double val = map.get(component);
 		 val *= units.get(component);
-		 targetFormula = targetFormula.replace(component, String.valueOf(val));
+		 targetFormula = targetFormula.replaceFirst(component, String.valueOf(val));
 	  }
 	  // Вывод выражения в Log
-	  Log.d("Calculate", "Current target formula is: " + targetFormula);
+	  Log.d("Calculate", "Current target formula after replace is: " + targetFormula);
 	  // *****************Передаём полученное выражение на вычисление в новый поток***********************
 	  // Создаём внутренний локальный поток для вычисления
 	  final String finalExpression = targetFormula;
@@ -109,7 +109,7 @@ public class Formula implements Parcelable {
 	  SolveThread st = new SolveThread();
 	  st.start();
 	  // Возвращаем ответ на выражение
-	  Log.d("Calculate", "Unknown component's unit is: " + String.valueOf(units.get(unknownComponent)));
+	  Log.d("Calculate", "Unknown component's unit is: " + units.get(unknownComponent));
 	  return (st.calculate() * units.get(unknownComponent));
    }
 

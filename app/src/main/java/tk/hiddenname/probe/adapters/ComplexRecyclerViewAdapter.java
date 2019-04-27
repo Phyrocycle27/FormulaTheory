@@ -96,7 +96,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 	  Subject subject = (Subject) items.get(position);
 	  if (subject != null) {
 		 vh1.getLabel1().setText(subject.getName());
-		 vh1.getLabel2().setText("Всего формул: " + Integer.toString(subject.getNumOfFormulas()));
+		 vh1.getLabel2().setText("Всего формул: " + subject.getNumOfFormulas());
 		 vh1.getImageView().setImageBitmap(subject.getDrawable());
 	  }
    }
@@ -106,7 +106,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 	  Section section = (Section) items.get(position);
 	  if (section != null) {
 		 vh2.getLabel1().setText(section.getName());
-		 vh2.getLabel2().setText("Всего формул: " + Integer.toString(section.getNumOfFormulas()));
+		 vh2.getLabel2().setText("Всего формул: " + section.getNumOfFormulas());
 	  }
    }
 

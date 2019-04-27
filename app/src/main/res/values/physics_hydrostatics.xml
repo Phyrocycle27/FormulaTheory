@@ -12,12 +12,4 @@
         <item>ρ = P/(g*h)</item>
         <item>h = P/(g*ρ)</item>
     </string-array>
-    <string-array name="pressOfWaterWithAtmospherical">
-        <item>Атмосферное давление с давлением воды на определённой высоте</item>
-        <item>P = P.атм. + ρ*g*h</item>
-        <item>ρ = (P - P.атм.)/(g*h)</item>
-        <item>h = (P - P.атм.)/(g*ρ)</item>
-        <item>P.атм. = P - ρ*g*h</item>
-        <item>g = (P - P.атм.)/(ρ*h)</item>
-    </string-array>
 </resources>
