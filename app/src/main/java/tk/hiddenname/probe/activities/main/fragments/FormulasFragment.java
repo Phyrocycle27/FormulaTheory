@@ -15,25 +15,28 @@ import java.util.ArrayList;
 
 import tk.hiddenname.probe.R;
 import tk.hiddenname.probe.activities.CalculateActivity;
-import tk.hiddenname.probe.activities.main.ListActivity;
 import tk.hiddenname.probe.adapters.ComplexRecyclerViewAdapter;
 import tk.hiddenname.probe.adapters.RecyclerItemClickListener;
 import tk.hiddenname.probe.objects.Formula;
 
 public class FormulasFragment extends Fragment {
 
+   private ParentFragment parent;
    private RecyclerView rv;
-   private int subjectIndex = 0, sectionIndex = 0;
+   private long sectionId = 0;
    private ArrayList<Object> formulas;
 
 
-   void setSubjAndSectIndex(int subjectIndex, int sectionIndex) {
-	  this.subjectIndex = subjectIndex;
-	  this.sectionIndex = sectionIndex;
+   void setSectionId(long id) {
+	  this.sectionId = id;
    }
 
    private void getFormulas() {
-	  formulas = ListActivity.getFormulas(subjectIndex, sectionIndex);
+	  formulas = parent.getListActivity().getFormulasTwo(sectionId);
+   }
+
+   void setParent(ParentFragment parent) {
+	  this.parent = parent;
    }
 
    @Nullable

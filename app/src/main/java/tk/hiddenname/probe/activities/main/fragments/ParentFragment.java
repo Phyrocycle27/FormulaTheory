@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import tk.hiddenname.probe.R;
+import tk.hiddenname.probe.activities.main.ListActivity;
 
 public class ParentFragment extends Fragment {
 
-   private int subjectIndex;
+   private long subjectId;
+   private ListActivity listActivity;
 
    @Nullable
    @Override
@@ -24,22 +26,27 @@ public class ParentFragment extends Fragment {
    @Override
    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 	  SectionsFragment sectionsFragment = new SectionsFragment();
-	  sectionsFragment.setSubjectIndex(subjectIndex);
 	  sectionsFragment.setParent(this);
 	  replace(sectionsFragment);
    }
 
-   public void setSubjectIndex(int index) {
-	  subjectIndex = index;
+   public void setListActivity(ListActivity listActivity) {
+	  this.listActivity = listActivity;
    }
 
-   public void goToFormulas(int sectionIndex) {
-	  FormulasFragment formulasFragment = new FormulasFragment();
-	  formulasFragment.setSubjAndSectIndex(subjectIndex, sectionIndex);
-	  replace(formulasFragment);
+   public ListActivity getListActivity() {
+	  return listActivity;
    }
 
-   private void replace(Fragment childFragment) {
+   public long getSubjectId() {
+	  return subjectId;
+   }
+
+   public void setSubjectId(long id) {
+	  subjectId = id;
+   }
+
+   void replace(Fragment childFragment) {
 	  FragmentTransaction ft = getChildFragmentManager().beginTransaction();
 	  ft.replace(R.id.child_fragment_container, childFragment).addToBackStack(null).commit();
    }

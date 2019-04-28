@@ -16,22 +16,22 @@ import java.util.List;
 
 import tk.hiddenname.probe.R;
 import tk.hiddenname.probe.activities.main.fragments.ParentFragment;
-import tk.hiddenname.probe.objects.Formula;
-import tk.hiddenname.probe.objects.Section;
 import tk.hiddenname.probe.objects.Subject;
 import tk.hiddenname.probe.objects.Units;
 import tk.hiddenname.probe.sqlite_database.DatabaseThread;
 
 public class ListActivity extends AppCompatActivity {
-
-   private static ArrayList<Subject> subjects = new ArrayList<>();
+   private List<Subject> subjects;
    private static Units units = new Units();
+   private DatabaseThread dataThread;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
 	  super.onCreate(savedInstanceState);
 	  setContentView(R.layout.activity_main);
 	  createData();
+	  dataThread = new DatabaseThread(getApplicationContext());
+	  dataThread.start();
 
 	  final Toolbar toolbar = findViewById(R.id.toolbar);
 	  setSupportActionBar(toolbar);
@@ -46,34 +46,33 @@ public class ListActivity extends AppCompatActivity {
 	  tabLayout.setupWithViewPager(viewPager);
 
 	  final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
-
-	  runDB();
    }
 
    private void setupViewPager(ViewPager viewPager) {
 	  Adapter adapter = new Adapter(getSupportFragmentManager());
-	  for (int i = 0; i < getSubjects().size(); i++) {
+	  for (Subject subject : subjects) {
 		 ParentFragment fragment = new ParentFragment();
-		 fragment.setSubjectIndex(i);
-		 adapter.addFragment(fragment, (getSubjects().get(i)).getName());
+		 fragment.setSubjectId(subject.getId());
+		 fragment.setListActivity(this);
+		 adapter.addFragment(fragment, subject.getName());
 	  }
 	  viewPager.setAdapter(adapter);
    }
 
    private void createData() {
 	  /* *********** СПИСОК ФОРМУЛ **************** */
-	  ArrayList<Formula> formulas = new ArrayList<>();
+	  /*ArrayList<Formula> formulas = new ArrayList<>();
 	  formulas.add(new Formula(R.array.pressOfBody, this));
 	  formulas.add(new Formula(R.array.pressOfWater, this));
-	  /* ********** СПИСОК РАЗДЕЛОВ *************** */
-	  ArrayList<Section> sections = new ArrayList<>();
-	  sections.add(new Section(R.string.hydrostatics, formulas, this));
+	  /* *********** СПИСОК РАЗДЕЛОВ *************** */
+	  //ArrayList<Section> sections = new ArrayList<>();
+	  //sections.add(new Section(R.string.hydrostatics, formulas, this));
 	  /* ********** СПИСОК ПРЕДМТОВ *************** */
-	  subjects = new ArrayList<>();
-	  subjects.add(new Subject(R.string.physics, R.drawable.physics, android.R.color.holo_blue_light, sections, this));
-	  subjects.add(new Subject(R.string.chemistry, R.drawable.chemistry, android.R.color.holo_red_light, null, this));
-	  subjects.add(new Subject(R.string.algebra, R.drawable.algebra, android.R.color.holo_orange_light, null, this));
-	  subjects.add(new Subject(R.string.geometry, R.drawable.geometry, android.R.color.holo_green_light, null, this));
+	 /* subjects_two = new ArrayList<>();
+	  subjects_two.add(new Subject(R.string.physics, R.drawable.physics, android.R.color.holo_blue_light, sections, this));
+	  subjects_two.add(new Subject(R.string.chemistry, R.drawable.chemistry, android.R.color.holo_red_light, null, this));
+	  subjects_two.add(new Subject(R.string.algebra, R.drawable.algebra, android.R.color.holo_orange_light, null, this));
+	  subjects_two.add(new Subject(R.string.geometry, R.drawable.geometry, android.R.color.holo_green_light, null, this));*/
 	  // Экземпляры классов едениц измерения
 	  // Давление
 	  HashMap<String, Double> pressure = new HashMap<>();
@@ -122,8 +121,6 @@ public class ListActivity extends AppCompatActivity {
    }
 
    private void runDB() {
-	  DatabaseThread thread = new DatabaseThread(this);
-	  thread.start();
    }
 
    private class Adapter extends FragmentPagerAdapter {
@@ -156,28 +153,12 @@ public class ListActivity extends AppCompatActivity {
 	  }
    }
 
-   public static ArrayList<Subject> getSubjects() {
-	  return subjects;
+   public ArrayList<Object> getSectionsTwo(long subjectId) {
+	  return new ArrayList<Object>(dataThread.getSections(subjectId));
    }
 
-   public static ArrayList<Object> getSections(int subjIndex) {
-	  try {
-		 Subject subject = getSubjects().get(subjIndex);
-		 return new ArrayList<Object>(subject.getSections());
-	  } catch (NullPointerException e) {
-		 e.printStackTrace();
-	  }
-	  return null;
-   }
-
-   public static ArrayList<Object> getFormulas(int subjIndex, int sectIndex) {
-	  try {
-		 Section section = (Section) getSections(subjIndex).get(sectIndex);
-		 return new ArrayList<Object>(section.getFormulas());
-	  } catch (NullPointerException e) {
-		 e.printStackTrace();
-	  }
-	  return null;
+   public ArrayList<Object> getFormulasTwo(long sectionId) {
+	  return new ArrayList<Object>(dataThread.getFormulaObjects(sectionId));
    }
 
    public static Units getUnits() {

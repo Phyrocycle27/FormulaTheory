@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import tk.hiddenname.probe.R;
 import tk.hiddenname.probe.objects.Formula;
 import tk.hiddenname.probe.objects.Section;
-import tk.hiddenname.probe.objects.Subject;
-import tk.hiddenname.probe.viewholders.SubjectViewHolder;
 import tk.hiddenname.probe.viewholders.SectionViewHolder;
 import tk.hiddenname.probe.viewholders.FormulaViewHolder;
 
@@ -23,7 +21,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
    private Context context;
    private ArrayList<Object> items;
 
-   private final int SUBJECT = 0, SECTION = 1, FORMULA = 2;
+   private final int SECTION = 1, FORMULA = 2;
 
    public ComplexRecyclerViewAdapter(ArrayList<Object> items, Context context) {
 	  this.context = context;
@@ -32,9 +30,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
    @Override
    public int getItemViewType(int position) {
-	  if (items.get(position) instanceof Subject) {
-		 return SUBJECT;
-	  } else if (items.get(position) instanceof Section) {
+      if (items.get(position) instanceof Section) {
 		 return SECTION;
 	  } else if (items.get(position) instanceof Formula) {
 		 return FORMULA;
@@ -59,10 +55,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 	  LayoutInflater inflater = LayoutInflater.from(context);
 
 	  switch (viewType) {
-		 case SUBJECT:
-			View v1 = inflater.inflate(R.layout.subject_item, viewGroup, false);
-			viewHolder = new SubjectViewHolder(v1);
-			break;
 		 case SECTION:
 			View v2 = inflater.inflate(R.layout.section_item, viewGroup, false);
 			viewHolder = new SectionViewHolder(v2);
@@ -77,10 +69,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
    @Override
    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
 	  switch (viewHolder.getItemViewType()) {
-		 case SUBJECT:
-			SubjectViewHolder vh1 = (SubjectViewHolder) viewHolder;
-			configureViewHolder1(vh1, position);
-			break;
 		 case SECTION:
 			SectionViewHolder vh2 = (SectionViewHolder) viewHolder;
 			configureViewHolder2(vh2, position);
@@ -88,16 +76,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 		 case FORMULA:
 			FormulaViewHolder vh3 = (FormulaViewHolder) viewHolder;
 			configureViewHolder3(vh3, position);
-	  }
-   }
-
-   @SuppressLint("SetTextI18n")
-   private void configureViewHolder1(SubjectViewHolder vh1, final int position) {
-	  Subject subject = (Subject) items.get(position);
-	  if (subject != null) {
-		 vh1.getLabel1().setText(subject.getName());
-		 vh1.getLabel2().setText("Всего формул: " + subject.getNumOfFormulas());
-		 vh1.getImageView().setImageBitmap(subject.getDrawable());
 	  }
    }
 

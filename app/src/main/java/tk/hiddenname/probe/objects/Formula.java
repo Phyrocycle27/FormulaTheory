@@ -8,7 +8,6 @@ import android.util.Log;
 import org.mariuszgromada.math.mxparser.Expression;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Formula implements Parcelable {
@@ -16,6 +15,7 @@ public class Formula implements Parcelable {
    private static final String delimeters = "[=+\\-*(/)\\s]";
    private String name, formula;
    private int numOfFormulas;
+   private long id;
    private String[] formulas, components;
 
    public Formula(int formulasArray, Context context) {
@@ -28,7 +28,17 @@ public class Formula implements Parcelable {
 	  System.arraycopy(tmpFormulasArr, 1, formulas, 0, len);
 	  formula = formulas[0];
 	  components = createComponets(formula);
-	  Log.d("COMPONENTS", Arrays.toString(components));
+   }
+
+   public Formula() {
+   }
+
+   public long getId() {
+	  return id;
+   }
+
+   public void setId(long id) {
+	  this.id = id;
    }
 
    private Formula(Parcel in) {
@@ -37,6 +47,23 @@ public class Formula implements Parcelable {
 	  numOfFormulas = in.readInt();
 	  formulas = in.createStringArray();
 	  components = in.createStringArray();
+   }
+
+   public void setName(String name) {
+	  this.name = name;
+   }
+
+   private void setFormula() {
+	  this.formula = formulas[0];
+   }
+
+   public void setNumOfFormulas(int numOfFormulas) {
+	  this.numOfFormulas = numOfFormulas;
+   }
+
+   public void setFormulas(String[] formulas) {
+	  this.formulas = formulas;
+	  setFormula();
    }
 
    private String[] createComponets(String str) {

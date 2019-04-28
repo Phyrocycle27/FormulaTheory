@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	  Log.d("LogDB", "создаём таблицы");
 	  db.execSQL(DBConstants.SubjectEntity.CREATE_TABLE);
 	  db.execSQL(DBConstants.SectionEntity.CREATE_TABLE);
-	  db.execSQL(DBConstants.FormulaSubsectionEntity.CREATE_TABLE);
+	  db.execSQL(DBConstants.FormulaObjectEntity.CREATE_TABLE);
 	  db.execSQL(DBConstants.FormulaEntity.CREATE_TABLE);
 	  db.execSQL(DBConstants.UnitObjectEntity.CREATE_TABLE);
 	  db.execSQL(DBConstants.UnitEntity.CREATE_TABLE);
@@ -41,6 +41,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
    private void firstAddDataToDB(SQLiteDatabase db) {
 	  List<Subject> subjects = createDataSubject();
+	  for (Subject subject : subjects) {
+		 Log.d("LogDB", subject.toString());
+	  }
 	  ContentValues cv = new ContentValues();
 	  int subjectId = 0, sectionId = 0, formulaSubSectionId = 0, formulaId = 0;
 	  //***************** Добавление предметов в таблицу subject ***********************************
@@ -66,10 +69,10 @@ public class DBHelper extends SQLiteOpenHelper {
 				  if (section.getFormulas() != null)
 					 for (Formula formula : section.getFormulas()) {
 						cv.clear();
-						cv.put(DBConstants.FormulaSubsectionEntity.COLUMN_NAME, formula.getName());
-						cv.put(DBConstants.FormulaSubsectionEntity._ID, formulaSubSectionId);
-						cv.put(DBConstants.FormulaSubsectionEntity.COLUMN_SECTION_ID, sectionId);
-						db.insert(DBConstants.FormulaSubsectionEntity.TABLE_NAME, null, cv);
+						cv.put(DBConstants.FormulaObjectEntity.COLUMN_DESCRIPTION, formula.getName());
+						cv.put(DBConstants.FormulaObjectEntity._ID, formulaSubSectionId);
+						cv.put(DBConstants.FormulaObjectEntity.COLUMN_SECTION_ID, sectionId);
+						db.insert(DBConstants.FormulaObjectEntity.TABLE_NAME, null, cv);
 						//****************** Добавление формул в таблицу formula *******************
 						if (formula.getFormulas().length > 0)
 						   for (String formula_str : formula.getFormulas()) {
@@ -98,7 +101,6 @@ public class DBHelper extends SQLiteOpenHelper {
 	  sections.add(new Section(R.string.hydrostatics, formulas, context));
 	  /* ********** СПИСОК ПРЕДМТОВ *************** */
 	  ArrayList<Subject> subjects = new ArrayList<>();
-	  ArrayList<Section> sections1;
 	  subjects.add(new Subject(R.string.physics, R.drawable.physics, android.R.color.holo_blue_light, sections, context));
 	  subjects.add(new Subject(R.string.chemistry, R.drawable.chemistry, android.R.color.holo_red_light, null, context));
 	  subjects.add(new Subject(R.string.algebra, R.drawable.algebra, android.R.color.holo_orange_light, null, context));

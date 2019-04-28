@@ -37,17 +37,17 @@ class DBConstants {
 
    }
 
-   static class FormulaSubsectionEntity {
-	  static final String TABLE_NAME = "formula_subsection";
+   static class FormulaObjectEntity {
+	  static final String TABLE_NAME = "formula_object";
 	  static final String _ID = "_id";
-	  static final String COLUMN_NAME = "name";
+	  static final String COLUMN_DESCRIPTION = "description";
 	  static final String COLUMN_SECTION_ID = "section_id";
 	  static final String CREATE_TABLE =
 			  "CREATE TABLE IF NOT EXISTS " +
 					  TABLE_NAME + "( " +
 					  _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					  COLUMN_NAME + " TEXT NOT NULL, " +
 					  COLUMN_SECTION_ID + " INTEGER NOT NULL, " +
+					  COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
 					  "FOREIGN KEY (" + COLUMN_SECTION_ID + ") REFERENCES " +
 					  SectionEntity.TABLE_NAME + "(" + SectionEntity._ID + ") " + ")";
    }
@@ -64,7 +64,7 @@ class DBConstants {
 					  COLUMN_FORMULA_SUBSECTION_ID + " INTEGER NOT NULL, " +
 					  COLUMN_FORMULA + " TEXT NOT NULL, " +
 					  "FOREIGN KEY (" + COLUMN_FORMULA_SUBSECTION_ID + ") REFERENCES " +
-					  FormulaSubsectionEntity.TABLE_NAME + "(" + FormulaSubsectionEntity._ID + ") " + ")";
+					  FormulaObjectEntity.TABLE_NAME + "(" + FormulaObjectEntity._ID + ") " + ")";
    }
 
    static class UnitObjectEntity {
